@@ -245,6 +245,11 @@ def _get_version_git():
         _print('WARNING: git describe failed with: %s %s' % (n, result))
         return None, None
 
+    match = re.match(r'(\d+).(\d+).(\d+)-(datamarket\d*)', result)
+    if match:
+        name = '%s.%s.%s-%s' % tuple(match.groups())
+        return name, [int(n or OFFICIAL_BUILD) for n in match.groups()[:-1]]
+
     match = re.match(r'(\d+).(\d+).(\d+) (?: -(\d+)-g[0-9a-z]+)?', result, re.VERBOSE)
     if not match:
         return None, None
